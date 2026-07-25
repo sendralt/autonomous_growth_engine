@@ -6,147 +6,131 @@
 <body>
   <div x-data>
     <template x-if="$store.growthStore">
-      <div x-init="$store.growthStore.onOpen()" x-destroy="$store.growthStore.cleanup()">
-        <div class="modal-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;">
-          <div class="modal-container" @click.stop style="background:var(--color-background-elevated,#1e1e2e);border-radius:var(--border-radius-md,12px);box-shadow:var(--shadow-lg,0 10px 30px rgba(0,0,0,0.4));width:95%;max-width:1100px;max-height:92vh;overflow-y:auto;color:var(--color-text,#cdd6f4);">
+      <div x-init="$store.growthStore.onOpen()" x-destroy="$store.growthStore.cleanup()"
+           style="padding:16px;min-width:600px;">
 
-            <!-- Header -->
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--color-border,#45475a);">
-              <div style="display:flex;align-items:center;gap:10px;">
-                <span style="font-size:1.4rem;">📈</span>
-                <h3 style="margin:0;font-size:1.15rem;font-weight:600;">Growth Engine Dashboard</h3>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <button class="button secondary" style="padding:6px 12px;font-size:0.85rem;border-radius:8px;background:var(--color-background-muted,#313244);color:var(--color-text,#cdd6f4);border:1px solid var(--color-border,#45475a);cursor:pointer;"
-                        @click="$store.growthStore.onOpen()"
-                        :disabled="$store.growthStore.loading">
-                    <span x-show="!$store.growthStore.loading">Refresh</span>
-                    <span x-show="$store.growthStore.loading">Loading...</span>
-                </button>
-                <button class="button secondary" style="padding:6px 12px;font-size:0.85rem;border-radius:8px;background:transparent;color:var(--color-text-secondary,#a6adc8);border:none;cursor:pointer;"
-                        @click="closeModal()">
-                  <span class="material-symbols-outlined" style="font-size:1.2rem;">close</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Content -->
-            <div style="padding:24px;">
-
-              <!-- Setup banner if not initialized -->
-              <template x-if="$store.growthStore.setupStatus && !$store.growthStore.setupStatus.initialized">
-                <div style="margin-bottom:20px;padding:16px;background:var(--color-background-muted,#313244);border-radius:10px;border:1px solid var(--color-border,#45475a);">
-                  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-                    <div>
-                      <div style="font-weight:600;margin-bottom:4px;">⚠️ Growth engine not initialized</div>
-                      <div style="font-size:0.85rem;color:var(--color-text-secondary,#a6adc8);">
-                        Directory structure needs to be created before the engine can manage content.
-                      </div>
-                    </div>
-                    <button class="button primary" style="padding:8px 18px;border-radius:8px;background:#89b4fa;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;"
-                            @click="$store.growthStore.initializeEngine()"
-                            :disabled="$store.growthStore.busy">
-                      <span x-show="$store.growthStore.busy">Creating...</span>
-                      <span x-show="!$store.growthStore.busy">Initialize Now</span>
-                    </button>
-                  </div>
-                </div>
-              </template>
-
-              <!-- Stats Cards -->
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px;">
-                <div style="padding:16px;background:var(--color-background-muted,#313244);border-radius:10px;text-align:center;">
-                  <div style="font-size:0.75rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Research</div>
-                  <div style="font-size:1.6rem;font-weight:700;" x-text="$store.growthStore.researchCount"></div>
-                </div>
-                <div style="padding:16px;background:var(--color-background-muted,#313244);border-radius:10px;text-align:center;">
-                  <div style="font-size:0.75rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Review Queue</div>
-                  <div style="font-size:1.6rem;font-weight:700;color:#f9e2af;" x-text="$store.growthStore.reviewCount"></div>
-                </div>
-                <div style="padding:16px;background:var(--color-background-muted,#313244);border-radius:10px;text-align:center;">
-                  <div style="font-size:0.75rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Pipeline</div>
-                  <div style="font-size:1.6rem;font-weight:700;color:#a6e3a1;" x-text="$store.growthStore.pipelineCount"></div>
-                </div>
-                <div style="padding:16px;background:var(--color-background-muted,#313244);border-radius:10px;text-align:center;">
-                  <div style="font-size:0.75rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Published</div>
-                  <div style="font-size:1.6rem;font-weight:700;color:#89b4fa;" x-text="$store.growthStore.publishedCount"></div>
+        <!-- Setup banner if not initialized -->
+        <template x-if="$store.growthStore.setupStatus && !$store.growthStore.setupStatus.initialized">
+          <div style="margin-bottom:16px;padding:14px;background:var(--color-background-muted,#313244);border-radius:8px;border:1px solid var(--color-border,#45475a);">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div>
+                <div style="font-weight:600;margin-bottom:4px;">Growth engine not initialized</div>
+                <div style="font-size:0.85rem;color:var(--color-text-secondary,#a6adc8);">
+                  Directory structure needs to be created before the engine can manage content.
                 </div>
               </div>
-
-              <!-- File Reader Panel -->
-              <template x-if="$store.growthStore.currentFile">
-                <div style="margin-bottom:20px;padding:16px;background:var(--color-background-muted,#313244);border-radius:10px;border:1px solid var(--color-border,#45475a);">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                    <div style="font-weight:600;font-size:0.95rem;" x-text="$store.growthStore.currentFile.path.split('/').pop()"></div>
-                    <div style="display:flex;gap:8px;">
-                      <button style="padding:5px 12px;font-size:0.8rem;border-radius:6px;background:#a6e3a1;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;"
-                              @click="$store.growthStore.approveFile($store.growthStore.currentFile.path)"
-                              :disabled="$store.growthStore.busy">Approve</button>
-                      <button style="padding:5px 12px;font-size:0.8rem;border-radius:6px;background:#f38ba8;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;"
-                              @click="$store.growthStore.rejectFile($store.growthStore.currentFile.path)"
-                              :disabled="$store.growthStore.busy">Reject</button>
-                      <button style="padding:5px 12px;font-size:0.8rem;border-radius:6px;background:transparent;color:var(--color-text-secondary,#a6adc8);border:1px solid var(--color-border,#45475a);cursor:pointer;"
-                              @click="$store.growthStore.closeFile()">Close</button>
-                    </div>
-                  </div>
-                  <div style="font-size:0.75rem;color:var(--color-text-secondary,#a6adc8);margin-bottom:8px;" x-text="$store.growthStore.currentFile.path"></div>
-                  <pre style="background:var(--color-background,#11111b);padding:14px;border-radius:8px;overflow-x:auto;font-size:0.82rem;line-height:1.5;max-height:400px;white-space:pre-wrap;" x-text="$store.growthStore.currentFile.content"></pre>
-                </div>
-              </template>
-
-              <!-- Review Queue -->
-              <div style="margin-bottom:16px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                  <h4 style="margin:0;font-size:1rem;font-weight:600;">Review Queue</h4>
-                  <div style="display:flex;gap:4px;flex-wrap:wrap;">
-                    <template x-for="f in ['all','blog','social','reddit','email','influencer']" :key="f">
-                      <button :style="$store.growthStore.selectedFilter === f ? 'padding:4px 10px;font-size:0.78rem;border-radius:6px;border:none;cursor:pointer;background:#89b4fa;color:#1e1e2e;font-weight:600;text-transform:capitalize;' : 'padding:4px 10px;font-size:0.78rem;border-radius:6px;border:1px solid var(--color-border,#45475a);cursor:pointer;background:transparent;color:var(--color-text-secondary,#a6adc8);text-transform:capitalize;'"
-                              @click="$store.growthStore.loadReviewQueue(f)"
-                              x-text="f"></button>
-                    </template>
-                  </div>
-                </div>
-
-                <template x-if="$store.growthStore.filteredItems.length === 0">
-                  <div style="padding:24px;text-align:center;color:var(--color-text-secondary,#a6adc8);font-size:0.9rem;">
-                    No items in review queue.
-                  </div>
-                </template>
-
-                <template x-if="$store.growthStore.filteredItems.length > 0">
-                  <div style="border:1px solid var(--color-border,#45475a);border-radius:10px;overflow:hidden;">
-                    <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
-                      <thead>
-                        <tr style="background:var(--color-background-muted,#313244);">
-                          <th style="padding:10px 14px;text-align:left;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;">Filename</th>
-                          <th style="padding:10px 14px;text-align:left;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;">Type</th>
-                          <th style="padding:10px 14px;text-align:left;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;">Date</th>
-                          <th style="padding:10px 14px;text-align:right;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <template x-for="item in $store.growthStore.filteredItems" :key="item.path">
-                          <tr style="border-top:1px solid var(--color-border,#45475a);">
-                            <td style="padding:10px 14px;">
-                              <span style="cursor:pointer;color:#89b4fa;text-decoration:underline;" @click="$store.growthStore.readFile(item.path)" x-text="item.filename"></span>
-                            </td>
-                            <td style="padding:10px 14px;text-transform:capitalize;" x-text="item.type"></td>
-                            <td style="padding:10px 14px;color:var(--color-text-secondary,#a6adc8);font-size:0.8rem;" x-text="item.date_created ? item.date_created.split('T')[0] : '--'"></td>
-                            <td style="padding:10px 14px;text-align:right;white-space:nowrap;">
-                              <button style="padding:3px 8px;font-size:0.75rem;border-radius:5px;background:#a6e3a1;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;margin-left:4px;" @click="$store.growthStore.approveFile(item.path)" :disabled="$store.growthStore.busy">✓</button>
-                              <button style="padding:3px 8px;font-size:0.75rem;border-radius:5px;background:#f38ba8;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;margin-left:4px;" @click="$store.growthStore.rejectFile(item.path)" :disabled="$store.growthStore.busy">✗</button>
-                            </td>
-                          </tr>
-                        </template>
-                      </tbody>
-                    </table>
-                  </div>
-                </template>
-              </div>
-
+              <button class="button"
+                style="padding:8px 16px;border-radius:6px;background:var(--color-primary,#89b4fa);color:#1e1e2e;border:none;font-weight:600;cursor:pointer;"
+                @click="$store.growthStore.initializeEngine()"
+                :disabled="$store.growthStore.busy">
+                <span x-show="$store.growthStore.busy">Creating...</span>
+                <span x-show="!$store.growthStore.busy">Initialize Now</span>
+              </button>
             </div>
           </div>
+        </template>
+
+        <!-- Stats Cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px;">
+          <div style="padding:12px;background:var(--color-background-muted,#313244);border-radius:8px;text-align:center;">
+            <div style="font-size:0.7rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;margin-bottom:4px;">Research</div>
+            <div style="font-size:1.4rem;font-weight:700;" x-text="$store.growthStore.researchCount"></div>
+          </div>
+          <div style="padding:12px;background:var(--color-background-muted,#313244);border-radius:8px;text-align:center;">
+            <div style="font-size:0.7rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;margin-bottom:4px;">Review</div>
+            <div style="font-size:1.4rem;font-weight:700;color:#f9e2af;" x-text="$store.growthStore.reviewCount"></div>
+          </div>
+          <div style="padding:12px;background:var(--color-background-muted,#313244);border-radius:8px;text-align:center;">
+            <div style="font-size:0.7rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;margin-bottom:4px;">Pipeline</div>
+            <div style="font-size:1.4rem;font-weight:700;color:#a6e3a1;" x-text="$store.growthStore.pipelineCount"></div>
+          </div>
+          <div style="padding:12px;background:var(--color-background-muted,#313244);border-radius:8px;text-align:center;">
+            <div style="font-size:0.7rem;color:var(--color-text-secondary,#a6adc8);text-transform:uppercase;margin-bottom:4px;">Published</div>
+            <div style="font-size:1.4rem;font-weight:700;color:#89b4fa;" x-text="$store.growthStore.publishedCount"></div>
+          </div>
         </div>
+
+        <!-- Refresh button -->
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+          <button class="button"
+            style="padding:5px 12px;font-size:0.8rem;border-radius:6px;background:var(--color-background-muted,#313244);color:var(--color-text,#cdd6f4);border:1px solid var(--color-border,#45475a);cursor:pointer;"
+            @click="$store.growthStore.onOpen()"
+            :disabled="$store.growthStore.loading">
+            <span x-show="!$store.growthStore.loading">Refresh</span>
+            <span x-show="$store.growthStore.loading">Loading...</span>
+          </button>
+        </div>
+
+        <!-- File Reader Panel -->
+        <template x-if="$store.growthStore.currentFile">
+          <div style="margin-bottom:16px;padding:14px;background:var(--color-background-muted,#313244);border-radius:8px;border:1px solid var(--color-border,#45475a);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div style="font-weight:600;font-size:0.9rem;" x-text="$store.growthStore.currentFile.path.split('/').pop()"></div>
+              <div style="display:flex;gap:6px;">
+                <button style="padding:4px 10px;font-size:0.75rem;border-radius:5px;background:#a6e3a1;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;"
+                  @click="$store.growthStore.approveFile($store.growthStore.currentFile.path)"
+                  :disabled="$store.growthStore.busy">Approve</button>
+                <button style="padding:4px 10px;font-size:0.75rem;border-radius:5px;background:#f38ba8;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;"
+                  @click="$store.growthStore.rejectFile($store.growthStore.currentFile.path)"
+                  :disabled="$store.growthStore.busy">Reject</button>
+                <button style="padding:4px 10px;font-size:0.75rem;border-radius:5px;background:transparent;color:var(--color-text-secondary,#a6adc8);border:1px solid var(--color-border,#45475a);cursor:pointer;"
+                  @click="$store.growthStore.closeFile()">Close</button>
+              </div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--color-text-secondary,#a6adc8);margin-bottom:6px;" x-text="$store.growthStore.currentFile.path"></div>
+            <pre style="background:var(--color-background,#11111b);padding:12px;border-radius:6px;overflow-x:auto;font-size:0.78rem;line-height:1.5;max-height:350px;white-space:pre-wrap;" x-text="$store.growthStore.currentFile.content"></pre>
+          </div>
+        </template>
+
+        <!-- Review Queue -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
+            <h4 style="margin:0;font-size:0.95rem;font-weight:600;">Review Queue</h4>
+            <div style="display:flex;gap:3px;flex-wrap:wrap;">
+              <template x-for="f in ['all','blog','social','reddit','email','influencer']" :key="f">
+                <button
+                  :style="$store.growthStore.selectedFilter === f ? 'padding:3px 8px;font-size:0.72rem;border-radius:5px;border:none;cursor:pointer;background:var(--color-primary,#89b4fa);color:#1e1e2e;font-weight:600;text-transform:capitalize;' : 'padding:3px 8px;font-size:0.72rem;border-radius:5px;border:1px solid var(--color-border,#45475a);cursor:pointer;background:transparent;color:var(--color-text-secondary,#a6adc8);text-transform:capitalize;'"
+                  @click="$store.growthStore.loadReviewQueue(f)"
+                  x-text="f"></button>
+              </template>
+            </div>
+          </div>
+
+          <template x-if="$store.growthStore.filteredItems.length === 0">
+            <div style="padding:20px;text-align:center;color:var(--color-text-secondary,#a6adc8);font-size:0.85rem;">
+              No items in review queue.
+            </div>
+          </template>
+
+          <template x-if="$store.growthStore.filteredItems.length > 0">
+            <div style="border:1px solid var(--color-border,#45475a);border-radius:8px;overflow:hidden;">
+              <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+                <thead>
+                  <tr style="background:var(--color-background-muted,#313244);">
+                    <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;">Filename</th>
+                    <th style="padding:8px 12px;text-align:left;font-weight:600;font-size:0.72rem;text-transform:uppercase;">Type</th>
+                    <th style="padding:8px 12px;text-align:right;font-weight:600;font-size:0.72rem;text-transform:uppercase;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template x-for="item in $store.growthStore.filteredItems" :key="item.path">
+                    <tr style="border-top:1px solid var(--color-border,#45475a);">
+                      <td style="padding:8px 12px;">
+                        <span style="cursor:pointer;color:var(--color-primary,#89b4fa);text-decoration:underline;" @click="$store.growthStore.readFile(item.path)" x-text="item.filename"></span>
+                      </td>
+                      <td style="padding:8px 12px;text-transform:capitalize;" x-text="item.type"></td>
+                      <td style="padding:8px 12px;text-align:right;white-space:nowrap;">
+                        <button style="padding:2px 6px;font-size:0.7rem;border-radius:4px;background:#a6e3a1;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;margin-left:3px;" @click="$store.growthStore.approveFile(item.path)" :disabled="$store.growthStore.busy">OK</button>
+                        <button style="padding:2px 6px;font-size:0.7rem;border-radius:4px;background:#f38ba8;color:#1e1e2e;border:none;font-weight:600;cursor:pointer;margin-left:3px;" @click="$store.growthStore.rejectFile(item.path)" :disabled="$store.growthStore.busy">X</button>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </template>
+        </div>
+
       </div>
     </template>
   </div>
