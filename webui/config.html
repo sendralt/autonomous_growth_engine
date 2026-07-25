@@ -1,0 +1,114 @@
+<html>
+<head>
+  <title>Autonomous Growth Engine Settings</title>
+  <script type="module">
+    import { store } from "/components/plugins/plugin-settings-store.js";
+  </script>
+</head>
+<body>
+  <div x-data>
+    <template x-if="config">
+      <div>
+        <div class="section-title">Autonomous Growth Engine</div>
+        <div class="section-description">
+          Configure the growth marketing engine paths, timezone, and weekly schedule times.
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Growth docs path</div>
+            <div class="field-description">
+              Relative path from the project root where growth content directories live.
+            </div>
+          </div>
+          <div class="field-control">
+            <input type="text" x-model="config.growth_docs_path" placeholder="docs/growth" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Timezone</div>
+            <div class="field-description">
+              IANA timezone for all scheduled tasks (e.g. America/New_York, Europe/Rome).
+            </div>
+          </div>
+          <div class="field-control">
+            <input type="text" x-model="config.timezone" placeholder="America/New_York" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Monday — Research &amp; Intelligence</div>
+            <div class="field-description">Time for the weekly research task.</div>
+          </div>
+          <div class="field-control">
+            <input type="time" x-model="config.monday_time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Tuesday — Content Creation</div>
+            <div class="field-description">Time for the weekly content drafting task.</div>
+          </div>
+          <div class="field-control">
+            <input type="time" x-model="config.tuesday_time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Wednesday — Community Engagement</div>
+            <div class="field-description">Time for the weekly community engagement task.</div>
+          </div>
+          <div class="field-control">
+            <input type="time" x-model="config.wednesday_time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Thursday — Influencer Pipeline</div>
+            <div class="field-description">Time for the weekly influencer outreach task.</div>
+          </div>
+          <div class="field-control">
+            <input type="time" x-model="config.thursday_time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Friday — Email Newsletter</div>
+            <div class="field-description">Time for the weekly email newsletter task.</div>
+          </div>
+          <div class="field-control">
+            <input type="time" x-model="config.friday_time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Monthly review day</div>
+            <div class="field-description">Day of month for the monthly strategy review (1-28).</div>
+          </div>
+          <div class="field-control">
+            <input type="number" min="1" max="28" x-model.number="config.monthly_day" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <div class="field-title">Monthly review time</div>
+            <div class="field-description">Time for the monthly strategy review task.</div>
+          </div>
+          <div class="field-control">
+            <input type="time" x-model="config.monthly_time" />
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</body>
+</html>

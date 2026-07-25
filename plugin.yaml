@@ -1,0 +1,8 @@
+name: autonomous_growth_engine
+title: Autonomous Growth Engine
+description: Autonomous organic growth marketing engine with dashboard, review queue, and scheduled content pipeline.
+version: 1.0.0
+settings_sections:
+  - agent
+per_project_config: true
+per_agent_config: false

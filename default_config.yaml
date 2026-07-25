@@ -1,0 +1,9 @@
+growth_docs_path: docs/growth
+timezone: America/New_York
+monday_time: "08:00"
+tuesday_time: "09:00"
+wednesday_time: "09:00"
+thursday_time: "09:00"
+friday_time: "09:00"
+monthly_day: 1
+monthly_time: "10:00"
