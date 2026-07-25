@@ -1,10 +1,10 @@
+<!-- Growth Engine sidebar button -->
 <div x-data>
-  <template x-if="$store.growthStore">
-    <button class="config-button" x-move-after=".config-button#dashboard"
-            @click="openModal('/plugins/autonomous_growth_engine/webui/growth-dashboard.html')"
-            title="Growth Engine">
-      <span class="icon">📈</span>
-      <span class="label">Growth</span>
-    </button>
-  </template>
+  <button
+    class="config-button"
+    id="growth-engine"
+    title="Growth Engine"
+    @click="openModal('/plugins/autonomous_growth_engine/webui/growth-dashboard.html')">
+    <span class="material-symbols-outlined">trending_up</span>
+  </button>
 </div>
