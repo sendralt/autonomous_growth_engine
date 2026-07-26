@@ -1,5 +1,6 @@
 import { createStore } from "/js/AlpineStore.js";
 import { callJsonApi } from "/js/api.js";
+import { store as chatsStore } from "/components/sidebar/chats/chats-store.js";
 import {
   toastFrontendError,
   toastFrontendSuccess,
@@ -17,6 +18,10 @@ const model = {
   currentFile: null,
   selectedFilter: "all",
   setupStatus: null,
+
+  get contextId() {
+    return chatsStore?.getSelectedChatId?.() || globalThis.getContext?.() || "";
+  },
 
   get reviewCount() {
     return this.stats?.counts?.review ?? 0;
@@ -53,7 +58,10 @@ const model = {
   async loadStats() {
     this.loading = true;
     try {
-      const response = await callJsonApi(DASHBOARD_API, { action: "stats" });
+      const response = await callJsonApi(DASHBOARD_API, {
+        action: "stats",
+        context_id: this.contextId,
+      });
       this.stats = response;
     } catch (error) {
       console.error("Failed to load stats:", error);
@@ -70,6 +78,7 @@ const model = {
       const response = await callJsonApi(DASHBOARD_API, {
         action: "review_queue",
         filter: this.selectedFilter === "all" ? "" : this.selectedFilter,
+        context_id: this.contextId,
       });
       this.reviewItems = response?.items || [];
     } catch (error) {
@@ -81,7 +90,10 @@ const model = {
 
   async loadSetupStatus() {
     try {
-      const response = await callJsonApi(SETUP_API, { action: "status" });
+      const response = await callJsonApi(SETUP_API, {
+        action: "status",
+        context_id: this.contextId,
+      });
       this.setupStatus = response;
     } catch (error) {
       console.error("Failed to load setup status:", error);
@@ -92,7 +104,10 @@ const model = {
   async initializeEngine() {
     this.busy = true;
     try {
-      const response = await callJsonApi(SETUP_API, { action: "initialize" });
+      const response = await callJsonApi(SETUP_API, {
+        action: "initialize",
+        context_id: this.contextId,
+      });
       toastFrontendSuccess(response?.message || "Growth engine initialized.", "Growth Engine");
       await this.onOpen();
     } catch (error) {
@@ -110,6 +125,7 @@ const model = {
       const response = await callJsonApi(DASHBOARD_API, {
         action: "read_file",
         source_path: path,
+        context_id: this.contextId,
       });
       this.currentFile = { path, content: response?.content || "" };
     } catch (error) {
@@ -132,6 +148,7 @@ const model = {
       await callJsonApi(DASHBOARD_API, {
         action: "approve",
         source_path: path,
+        context_id: this.contextId,
       });
       toastFrontendSuccess("Content approved and moved to pipeline.", "Growth Engine");
       if (this.currentFile?.path === path) this.currentFile = null;
@@ -152,6 +169,7 @@ const model = {
       await callJsonApi(DASHBOARD_API, {
         action: "reject",
         source_path: path,
+        context_id: this.contextId,
       });
       toastFrontendInfo("Content rejected and deleted.", "Growth Engine");
       if (this.currentFile?.path === path) this.currentFile = null;
@@ -172,6 +190,7 @@ const model = {
       await callJsonApi(DASHBOARD_API, {
         action: "publish",
         source_path: path,
+        context_id: this.contextId,
       });
       toastFrontendSuccess("Content published.", "Growth Engine");
       if (this.currentFile?.path === path) this.currentFile = null;

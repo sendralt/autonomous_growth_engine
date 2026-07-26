@@ -103,7 +103,8 @@ class Dashboard(ApiHandler):
         source_path = str(input.get("source_path", "") or "").strip()
         if not source_path:
             raise ValueError("source_path is required")
-        dest_dir = os.path.join(self._growth_dir(context_id), "pipeline")
+        content_type = os.path.basename(os.path.dirname(source_path))
+        dest_dir = os.path.join(self._growth_dir(context_id), "pipeline", content_type)
         new_path = growth_io.move_file(source_path, dest_dir)
         return {"ok": True, "source_path": source_path, "new_path": new_path}
 
@@ -118,7 +119,8 @@ class Dashboard(ApiHandler):
         source_path = str(input.get("source_path", "") or "").strip()
         if not source_path:
             raise ValueError("source_path is required")
-        dest_dir = os.path.join(self._growth_dir(context_id), "published")
+        content_type = os.path.basename(os.path.dirname(source_path))
+        dest_dir = os.path.join(self._growth_dir(context_id), "published", content_type)
         new_path = growth_io.move_file(source_path, dest_dir)
         return {"ok": True, "source_path": source_path, "new_path": new_path}
 

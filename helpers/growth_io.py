@@ -40,20 +40,57 @@ def get_growth_dir(config: dict | None, context_id: str = "") -> str:
 
 
 def _resolve_workdir(context_id: str = "") -> str:
-    """Best-effort resolve of the current project workdir."""
+    """Best-effort resolve of the current project workdir.
+
+    Uses the projects system to map context_id -> project name -> project folder.
+    Falls back to /a0/usr/workdir only if no project is found.
+    """
+    from helpers import projects as projects_helper
+
+    # Try resolving via the provided context_id first
     if context_id:
         try:
             context = AgentContext.get(context_id)
-            if context and getattr(context, "workdir", None):
-                return context.workdir
+            if context:
+                project_name = projects_helper.get_context_project_name(context)
+                if project_name:
+                    folder = projects_helper.get_project_folder(project_name)
+                    if os.path.isdir(folder):
+                        return folder
         except Exception:
             pass
+
+        # Try resolving via chat persistence (context_id -> chat.json -> data.project)
+        try:
+            chat_path = os.path.abspath(
+                os.path.join("/a0/usr/chats", context_id, "chat.json")
+            )
+            if os.path.isfile(chat_path):
+                import json
+
+                with open(chat_path, "r", encoding="utf-8") as fh:
+                    chat_data = json.load(fh)
+                project_name = (chat_data.get("data") or {}).get("project")
+                if project_name and isinstance(project_name, str):
+                    folder = projects_helper.get_project_folder(project_name)
+                    if os.path.isdir(folder):
+                        return folder
+        except Exception:
+            pass
+
+    # Fallback: check active projects for one that has a growth docs directory
     try:
-        context = AgentContext.get()
-        if context and getattr(context, "workdir", None):
-            return context.workdir
+        active = projects_helper.get_active_projects_list()
+        for proj in active:
+            if isinstance(proj, dict):
+                name = proj.get("name")
+                if name and isinstance(name, str):
+                    folder = projects_helper.get_project_folder(name)
+                    if os.path.isdir(os.path.join(folder, "docs", "growth")):
+                        return folder
     except Exception:
         pass
+
     return os.path.abspath("/a0/usr/workdir")
 
 
@@ -129,7 +166,11 @@ def list_review_items(growth_dir: str) -> list[dict[str, Any]]:
 
 
 def list_pipeline_items(growth_dir: str) -> list[dict[str, Any]]:
-    """List files directly under pipeline/ (flat list)."""
+    """List files under pipeline/ including subdirectories (blog/, social/, etc.).
+
+    If files are in typed subdirectories (e.g. pipeline/blog/), the subdirectory
+    name is used as the content type. Top-level files get type 'pipeline'.
+    """
     pipeline_dir = os.path.join(growth_dir, "pipeline")
     items: list[dict[str, Any]] = []
     if not os.path.isdir(pipeline_dir):
@@ -138,11 +179,20 @@ def list_pipeline_items(growth_dir: str) -> list[dict[str, Any]]:
         entry_path = os.path.join(pipeline_dir, entry)
         if os.path.isfile(entry_path):
             items.append(_file_metadata(entry_path, "pipeline"))
+        elif os.path.isdir(entry_path):
+            for sub_entry in sorted(os.listdir(entry_path)):
+                sub_path = os.path.join(entry_path, sub_entry)
+                if os.path.isfile(sub_path):
+                    items.append(_file_metadata(sub_path, entry))
     return items
 
 
 def list_published_items(growth_dir: str) -> list[dict[str, Any]]:
-    """List files directly under published/."""
+    """List files under published/ including subdirectories.
+
+    If files are in typed subdirectories (e.g. published/blog/), the subdirectory
+    name is used as the content type. Top-level files get type 'published'.
+    """
     published_dir = os.path.join(growth_dir, "published")
     items: list[dict[str, Any]] = []
     if not os.path.isdir(published_dir):
@@ -151,6 +201,11 @@ def list_published_items(growth_dir: str) -> list[dict[str, Any]]:
         entry_path = os.path.join(published_dir, entry)
         if os.path.isfile(entry_path):
             items.append(_file_metadata(entry_path, "published"))
+        elif os.path.isdir(entry_path):
+            for sub_entry in sorted(os.listdir(entry_path)):
+                sub_path = os.path.join(entry_path, sub_entry)
+                if os.path.isfile(sub_path):
+                    items.append(_file_metadata(sub_path, entry))
     return items
 
 
